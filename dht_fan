@@ -1,0 +1,43 @@
+//BASIT ABDUL
+#include <DHT.h>  //menyertakan library DHT kedalam program
+
+#define DHTPIN 2 //kita pasang sensor pada pin 8
+#define DHTTYPE DHT11 //kita menggunakan jenis sensor DHT11, ubah jika kamu gunakan sensor lain seperti DHT22 (AM2302) atau DHT21 (AM2301)
+
+DHT dht(DHTPIN, DHTTYPE); //deklarasi pin sensor dengan jenis sensor yang dipilih
+
+
+
+int relay= 4; //kita menggunakan pin 9 untuk relay
+
+void setup() {
+  dht.begin(); //program komunikasi atau setup untuk sensor DHT 
+  pinMode(relay, OUTPUT); //mengatur relay sebagai OUTPUT
+  Serial.begin(9600);
+}
+
+void loop() {
+  float kelembaban = dht.readHumidity(); //menyimpan nilai kelembaban pada variabel kelembaban  
+  float suhu = dht.readTemperature(); //menyimpan nilai suhu pada variabel suhu
+  delay(200); //mengatur jeda waktu pembacaan sensor selama 200 milidetik
+  Serial.print(kelembaban); //menampilkan nilai kelembaban pada Serial Monitor
+  Serial.print(" "); //menambahkan spasi
+  Serial.println(suhu); //menampilkan nilai suhu pada Serial Monitor
+
+  
+
+  //kondisi if dibawah ini, silahkan di atur sesuai dengan kebutuhan kamu
+
+  if ( kelembaban > 80.10){ //jika kelembaban lebih besar dari 80.10
+    digitalWrite(relay, LOW); //relay menyala
+  }
+
+  else if( suhu > 30.10){ //jika suhu lebih besar dari 30.10 
+    digitalWrite(relay, LOW); //relay menyala
+  }
+
+  else{ //jika tidak 
+    digitalWrite(relay, HIGH); //relay mati
+  }
+  
+}
