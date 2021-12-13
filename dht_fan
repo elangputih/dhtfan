@@ -1,19 +1,29 @@
-//BASIT ABDUL
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
 #include <DHT.h>  //menyertakan library DHT kedalam program
 
-#define DHTPIN 2 //kita pasang sensor pada pin 8
+#define DHTPIN 7 //kita pasang sensor pada pin 8
 #define DHTTYPE DHT11 //kita menggunakan jenis sensor DHT11, ubah jika kamu gunakan sensor lain seperti DHT22 (AM2302) atau DHT21 (AM2301)
 
 DHT dht(DHTPIN, DHTTYPE); //deklarasi pin sensor dengan jenis sensor yang dipilih
 
+#include <LiquidCrystal.h>//menyertakan library LCD
 
+LiquidCrystal_I2C lcd(0x27, 16, 2); //pin yang dipadakai LCD
 
 int relay= 4; //kita menggunakan pin 9 untuk relay
 
 void setup() {
+ // lcd.begin(16, 2); //mengatur ukuran lcd yang dipakai
   dht.begin(); //program komunikasi atau setup untuk sensor DHT 
   pinMode(relay, OUTPUT); //mengatur relay sebagai OUTPUT
   Serial.begin(9600);
+  Serial.begin(9600);
+  lcd.begin();
+
+  lcd.setCursor(0,0);
+  lcd.print("Sensor DHT11");
+  dht.begin();
 }
 
 void loop() {
@@ -24,9 +34,18 @@ void loop() {
   Serial.print(" "); //menambahkan spasi
   Serial.println(suhu); //menampilkan nilai suhu pada Serial Monitor
 
-  
+  //menampilkan nilai kelembaban pada LCD
+  lcd.setCursor(0, 0); //
+  lcd.print("Kelembaban.: ");
+  lcd.print((int) kelembaban);
+  lcd.print("%");
+  //menampilkan nilai suhu pada LCD
+  lcd.setCursor(0, 1);
+  lcd.print("Suhu: ");
+  lcd.print((int) suhu);
+  lcd.println(" Celcius ");
 
-  //kondisi if dibawah ini, silahkan di atur sesuai dengan kebutuhan kamu
+  //kondisi if dibawah ini, sailahkan di atur sesuai dengan kebutuhan kamu
 
   if ( kelembaban > 80.10){ //jika kelembaban lebih besar dari 80.10
     digitalWrite(relay, LOW); //relay menyala
